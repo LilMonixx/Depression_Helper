@@ -1,13 +1,12 @@
 const Mood = require('../models/moodModel');
-const User = require('../models/userModel');
 
 // @desc    Get all mood logs for a user
 // @route   GET /api/mood
 // @access  Private
 const getMoods = async (req, res) => {
     try {
-        // Tìm tất cả cảm xúc của người dùng đã đăng nhập, sắp xếp theo ngày
-        const moods = await Mood.find({ user: req.user.id }).sort({ logDate: 'desc' });
+        // Sắp xếp theo createdAt giảm dần (mới nhất lên đầu)
+        const moods = await Mood.find({ user: req.user.id }).sort({ createdAt: 'desc' });
         res.status(200).json(moods);
     } catch (error) {
         console.error(error);
@@ -15,34 +14,33 @@ const getMoods = async (req, res) => {
     }
 };
 
-// @desc    Log or update a mood for a specific date
+// @desc    Log a new mood entry
 // @route   POST /api/mood
 // @access  Private
 const logMood = async (req, res) => {
     try {
-        const { moodLevel, note, logDate } = req.body;
+        const { moodLevel, note } = req.body; // <-- Chỉ nhận 2 trường này
 
         // 1. Validation
-        if (!moodLevel || !logDate) {
-            return res.status(400).json({ message: 'Vui lòng cung cấp mức độ cảm xúc và ngày.' });
+        if (!moodLevel) {
+            return res.status(400).json({ message: 'Vui lòng cung cấp mức độ cảm xúc.' });
         }
 
-        // 2. "Upsert" logic:
-        // Tìm một bản ghi có user: req.user.id VÀ logDate: logDate
-        // Nếu tìm thấy -> Cập nhật nó.
-        // Nếu không tìm thấy -> Tạo một bản ghi mới.
-        const updatedMood = await Mood.findOneAndUpdate(
-            { user: req.user.id, logDate: new Date(logDate) }, // Điều kiện tìm kiếm
-            { moodLevel, note }, // Dữ liệu để cập nhật hoặc tạo mới
-            { 
-                new: true, // Trả về bản ghi đã được cập nhật
-                upsert: true, // Đây là "ma thuật": nếu không tìm thấy, hãy tạo mới
-            }
-        );
+        // 2. Lấy ngày hôm nay (set về 0 giờ để nhóm cho dễ)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); 
 
-        res.status(201).json(updatedMood);
-    } catch (error)
-    {
+        // 3. TẠO MỚI một bản ghi (không cập nhật/upsert)
+        const newMood = await Mood.create({
+            user: req.user.id,
+            moodLevel,
+            note,
+            logDate: today, // Vẫn lưu lại ngày để nhóm
+        });
+
+        res.status(201).json(newMood);
+
+    } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }

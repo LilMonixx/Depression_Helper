@@ -2,16 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+/* --- PHẦN 1: ĐỊNH NGHĨA BIẾN MÀU --- */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
-    /* ... (và rất nhiều biến màu --card, --primary, etc.) ... */
+    /* Màu tùy chỉnh của chúng ta */
+    --background: 43 83% 98%; /* Trắng ngà */
+    --foreground: 227 18% 30%; /* Xám than */
+
+    /* --- PHẦN BỊ THIẾU CỦA SHADCN --- */
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
+    --radius: 0.5rem;
   }
 
   .dark {
+    /* (Bạn có thể tùy chỉnh màu dark mode sau) */
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
-    /* ... (và các biến màu dark mode) ... */
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    /* (và các biến dark mode khác...) */
+  }
+}
+
+/* --- PHẦN 2: SỬ DỤNG BIẾN MÀU --- */
+@layer base {
+  * {
+    border-color: hsl(var(--border)); 
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }

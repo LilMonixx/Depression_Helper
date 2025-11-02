@@ -2,23 +2,30 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import RegisterPage from './pages/RegisterPage.tsx';
-import ProtectedRoute from './components/ProtectedRoute.tsx'; // <-- IMPORT MỚI
+import ProtectedRoute from './components/ProtectedRoute.tsx';
+import MoodPage from './pages/MoodPage.tsx';
+import { Toaster } from "@/components/ui/sonner"; 
+import HealingLibraryPage from './pages/HealingLibraryPage.tsx';
 import './index.css';
 
 function App() {
   return (
-    <Routes>
-      {/* --- Route được bảo vệ --- */}
-      <Route element={<ProtectedRoute />}>
-        {/* Chỉ người đã đăng nhập mới vào được đây */}
-        <Route path="/" element={<HomePage />} />
-        {/* (Sau này bạn có thể thêm các route khác cần bảo vệ ở đây) */}
-      </Route>
+    // Bọc mọi thứ trong một thẻ rỗng
+    <>
+      <Routes>
+        {/* --- Route được bảo vệ --- */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/mood" element={<MoodPage />} />
+          <Route path="/library" element={<HealingLibraryPage />} />
+        </Route>
 
-      {/* --- Route công khai --- */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-    </Routes>
+        {/* --- Route công khai --- */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+      <Toaster /> 
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react"; // <-- IMPORT 1: Để quản lý state
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link, useNavigate } from "react-router-dom"; // <-- IMPORT 2: Thêm useNavigate
-import axios from "axios"; // <-- IMPORT 3: Để gọi API
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginPage = () => {
-  // --- PHẦN LOGIC MỚI ---
+  // --- PHẦN LOGIC XỬ LÝ ---
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // Để hiển thị lỗi
@@ -37,7 +37,7 @@ const LoginPage = () => {
       // 2. Nếu thành công, lưu token vào localStorage
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
-
+        
         // 3. Điều hướng về trang chủ
         navigate("/");
       }
@@ -51,10 +51,11 @@ const LoginPage = () => {
       }
     }
   };
-  // --- KẾT THÚC PHẦN LOGIC MỚI ---
+  // --- KẾT THÚC PHẦN LOGIC ---
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    // Sử dụng màu nền 'brand-bg' (Trắng ngà)
+    <div className="flex items-center justify-center min-h-screen bg-background">
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Chào mừng trở lại</CardTitle>
@@ -62,7 +63,8 @@ const LoginPage = () => {
             Đăng nhập để tiếp tục hành trình của bạn.
           </CardDescription>
         </CardHeader>
-        {/* SỬA LẠI FORM ĐỂ KẾT NỐI VỚI LOGIC */}
+        
+        {/* Kết nối form với hàm handleSubmit */}
         <form onSubmit={handleSubmit}>
           <CardContent>
             <div className="grid w-full items-center gap-4">
@@ -72,8 +74,8 @@ const LoginPage = () => {
                   id="email"
                   type="email"
                   placeholder="email@example.com"
-                  value={email} // <-- Kết nối state
-                  onChange={(e) => setEmail(e.target.value)} // <-- Cập nhật state
+                  value={email} // Kết nối state
+                  onChange={(e) => setEmail(e.target.value)} // Cập nhật state
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
@@ -82,11 +84,11 @@ const LoginPage = () => {
                   id="password"
                   type="password"
                   placeholder="Mật khẩu của bạn"
-                  value={password} // <-- Kết nối state
-                  onChange={(e) => setPassword(e.target.value)} // <-- Cập nhật state
+                  value={password} // Kết nối state
+                  onChange={(e) => setPassword(e.target.value)} // Cập nhật state
                 />
               </div>
-
+              
               {/* Hiển thị lỗi nếu có */}
               {error && (
                 <p className="text-sm text-red-600">{error}</p>
@@ -94,7 +96,13 @@ const LoginPage = () => {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col items-start gap-4">
-            <Button type="submit" className="w-full">Đăng nhập</Button> {/* Thêm type="submit" */}
+            {/* Sử dụng màu 'brand-sage' cho nút bấm */}
+            <Button 
+              type="submit" 
+              className="w-full bg-brand-sage text-brand-text hover:bg-brand-sage/90"
+            >
+              Đăng nhập
+            </Button>
             <p className="text-sm text-center w-full">
               Chưa có tài khoản?{" "}
               <Link to="/register" className="font-semibold text-blue-600 hover:underline">

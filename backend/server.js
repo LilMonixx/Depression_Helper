@@ -7,6 +7,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const journalRoutes = require('./routes/journalRoutes');
 const moodRoutes = require('./routes/moodRoutes');
+const healingContentRoutes = require('./routes/healingContentRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -37,6 +38,7 @@ const PORT = process.env.PORT || 5000;
 app.use('/api/auth', authRoutes);
 app.use('/api/journal', journalRoutes);
 app.use('/api/mood', moodRoutes);
+app.use('/api/content', healingContentRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running ...');

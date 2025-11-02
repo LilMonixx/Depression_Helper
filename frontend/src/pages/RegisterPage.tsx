@@ -1,4 +1,4 @@
-import { useState } from "react"; // <-- IMPORT 1
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link, useNavigate } from "react-router-dom"; // <-- IMPORT 2
-import axios from "axios"; // <-- IMPORT 3
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const RegisterPage = () => {
-  // --- PHẦN LOGIC MỚI ---
-  const [displayName, setDisplayName] = useState(""); // Thêm state cho tên
+  // --- PHẦN LOGIC XỬ LÝ ---
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,16 +25,14 @@ const RegisterPage = () => {
     e.preventDefault();
     setError("");
 
-    // Kiểm tra mật khẩu (ví dụ đơn giản)
     if (password.length < 6) {
       setError("Mật khẩu phải có ít nhất 6 ký tự.");
       return;
     }
 
     try {
-      // 1. Gọi API backend
       const response = await axios.post(
-        "http://localhost:5001/api/auth/register", // URL của API đăng ký
+        "http://localhost:5001/api/auth/register",
         {
           displayName,
           email,
@@ -42,16 +40,12 @@ const RegisterPage = () => {
         }
       );
 
-      // 2. Nếu thành công, lưu token
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
-
-        // 3. Điều hướng về trang chủ
         navigate("/");
       }
 
     } catch (err) {
-      // 4. Nếu lỗi (ví dụ: email đã tồn tại)
       if (err.response && err.response.data.message) {
         setError(err.response.data.message);
       } else {
@@ -59,10 +53,11 @@ const RegisterPage = () => {
       }
     }
   };
-  // --- KẾT THÚC PHẦN LOGIC MỚI ---
+  // --- KẾT THÚC PHẦN LOGIC ---
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    // 1. Áp dụng màu nền 'bg-background'
+    <div className="flex items-center justify-center min-h-screen bg-background">
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Tạo tài khoản</CardTitle>
@@ -73,7 +68,6 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit}>
           <CardContent>
             <div className="grid w-full items-center gap-4">
-              {/* Ô nhập Tên hiển thị */}
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="displayName">Tên hiển thị</Label>
                 <Input
@@ -84,7 +78,6 @@ const RegisterPage = () => {
                   onChange={(e) => setDisplayName(e.target.value)}
                 />
               </div>
-              {/* Ô nhập Email */}
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -95,10 +88,9 @@ const RegisterPage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              {/* Ô nhập Mật khẩu */}
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="password">Mật khẩu</Label> 
-                   <Input
+                <Label htmlFor="password">Mật khẩu</Label>
+                <Input
                   id="password"
                   type="password"
                   placeholder="Mật khẩu (ít nhất 6 ký tự)"
@@ -106,16 +98,20 @@ const RegisterPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-
-              {/* Hiển thị lỗi nếu có */}
+              
               {error && (
                 <p className="text-sm text-red-600">{error}</p>
               )}
             </div>
           </CardContent>
           <CardFooter className="flex flex-col items-start gap-4">
-            <Button type="submit" className="w-full">Tạo tài khoản</Button>
-            {/* Link tới trang Đăng nhập */}
+            {/* 2. Áp dụng màu 'brand-sage' cho nút bấm */}
+            <Button 
+              type="submit" 
+              className="w-full bg-brand-sage text-brand-text hover:bg-brand-sage/90"
+            >
+              Tạo tài khoản
+            </Button>
             <p className="text-sm text-center w-full">
               Đã có tài khoản?{" "}
               <Link to="/login" className="font-semibold text-blue-600 hover:underline">

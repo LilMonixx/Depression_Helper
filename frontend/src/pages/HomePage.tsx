@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 // Import các component UI chúng ta cần
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -104,10 +104,19 @@ const HomePage = () => {
       {/* Nút Đăng xuất */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold">Nhật ký của bạn</h1>
-        <Button variant="outline" onClick={handleLogout}>
-          Đăng xuất
-        </Button>
-      </div>
+        <div className="flex space-x-2"> {/* Optional: Group buttons */}
+    {/* ADD THIS LINK */}
+          <Link to="/library">
+            <Button variant="outline">Thư viện Chữa lành</Button>
+           </Link>
+          <Link to="/mood">
+              <Button variant="outline">Theo dõi Cảm xúc</Button>
+          </Link>
+              <Button variant="outline" onClick={handleLogout}>
+                Đăng xuất
+              </Button>
+    </div>
+</div>
 
       {/* Form tạo bài viết mới */}
       <Card className="mb-8">
