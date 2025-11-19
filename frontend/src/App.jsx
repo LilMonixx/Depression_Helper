@@ -1,11 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage.tsx';
-import LoginPage from './pages/LoginPage.tsx';
-import RegisterPage from './pages/RegisterPage.tsx';
-import ProtectedRoute from './components/ProtectedRoute.tsx';
-import MoodPage from './pages/MoodPage.tsx';
+import HomePage from './pages/HomePage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import MoodPage from './pages/MoodPage.jsx';
 import { Toaster } from "@/components/ui/sonner"; 
-import HealingLibraryPage from './pages/HealingLibraryPage.tsx';
+import HealingLibraryPage from './pages/HealingLibraryPage.jsx';
 import './index.css';
 
 function App() {
