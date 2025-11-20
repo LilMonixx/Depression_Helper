@@ -1,75 +1,64 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 const HealingLibraryPage = () => {
   const [contentList, setContentList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        // API này là công khai, không cần gửi token
         const response = await axios.get('http://localhost:5001/api/content');
         setContentList(response.data);
-        setLoading(false);
       } catch (err) {
-        console.error('Không thể tải nội dung:', err);
-        setError('Không thể tải nội dung. Vui lòng thử lại.');
+        console.error(err);
+      } finally {
         setLoading(false);
       }
     };
-
     fetchContent();
-  }, []); // Chạy 1 lần khi tải trang
+  }, []);
 
-  // Hàm để lấy icon cho từng loại nội dung
   const getTypeIcon = (type) => {
-    if (type === 'Article') return '📄'; // Emoji bài báo
-    if (type === 'Podcast') return '🎧'; // Emoji tai nghe
-    if (type === 'Video') return '📺'; // Emoji TV
+    if (type === 'Article') return '📄';
+    if (type === 'Podcast') return '🎧';
+    if (type === 'Video') return '📺';
     return '🔗';
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <Button variant="outline" asChild className="mb-4">
-        <Link to="/">Quay lại Nhật ký</Link>
-      </Button>
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold text-brand-text mb-6">Thư viện Chữa lành</h1>
 
-      <h1 className="text-3xl font-bold mb-6">Thư viện Chữa lành</h1>
-
-      {loading && <p>Đang tải nội dung...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+      {loading && <p className="text-center text-gray-500">Đang tải nội dung...</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {!loading && contentList.map((item) => (
-          <Card key={item._id} className="flex flex-col">
+          <Card key={item._id} className="flex flex-col hover:shadow-lg transition-all duration-300 border-brand-lavender/50 bg-white">
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
+              <CardTitle className="text-lg flex items-center gap-2 text-brand-text">
                 <span>{getTypeIcon(item.type)}</span>
-                {item.title}
+                <span className="truncate">{item.title}</span>
               </CardTitle>
-              <CardDescription>{item.description}</CardDescription>
+              <CardDescription className="line-clamp-2">{item.description}</CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow">
-              {/* (Tùy chọn) Hiển thị ảnh bìa nếu có */}
+            <CardContent className="flex-grow p-0">
               {item.thumbnailUrl && (
-                <img 
-                  src={item.thumbnailUrl} 
-                  alt={item.title} 
-                  className="rounded-md mb-4 w-full h-32 object-cover"
-                />
+                <div className="w-full h-40 overflow-hidden">
+                    <img 
+                      src={item.thumbnailUrl} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
+                    />
+                </div>
               )}
             </CardContent>
-            <CardFooter>
-              {/* Dùng <a> để mở link trong tab mới */}
+            <CardFooter className="pt-4">
               <a href={item.url} target="_blank" rel="noopener noreferrer" className="w-full">
-                <Button className="w-full">
-                  {item.type === 'Article' ? 'Đọc bài viết' : 'Xem/Nghe ngay'}
+                <Button variant="outline" className="w-full hover:bg-brand-lavender hover:text-brand-text border-brand-sage text-gray-600">
+                  {item.type === 'Article' ? 'Đọc ngay' : 'Xem ngay'}
                 </Button>
               </a>
             </CardFooter>
