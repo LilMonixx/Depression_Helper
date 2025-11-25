@@ -42,6 +42,7 @@ const RegisterPage = () => {
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
         navigate("/");
       }
 

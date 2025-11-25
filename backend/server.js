@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const journalRoutes = require('./routes/journalRoutes');
 const moodRoutes = require('./routes/moodRoutes');
 const healingContentRoutes = require('./routes/healingContentRoutes');
+const userRoutes = require('./routes/userRoutes');  
 
 // Load environment variables
 dotenv.config();
@@ -39,6 +40,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/journal', journalRoutes);
 app.use('/api/mood', moodRoutes);
 app.use('/api/content', healingContentRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running ...');
