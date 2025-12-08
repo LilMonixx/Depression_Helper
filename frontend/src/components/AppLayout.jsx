@@ -1,89 +1,81 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Toaster } from "@/components/ui/sonner";
+import { Leaf, Plus, LogOut, Shield } from 'lucide-react';
+import Footer from './Footer';
 
 const AppLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Lấy thông tin user từ localStorage để kiểm tra quyền Admin
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
 
   const handleLogout = () => {
-    // Xóa token và thông tin user khi đăng xuất
     localStorage.removeItem('token');
     localStorage.removeItem('userInfo');
     navigate('/login');
   };
 
-  // Hàm kiểm tra link đang active để đổi màu (Highlight)
   const isActive = (path) => location.pathname === path 
-    ? "bg-brand-sage text-brand-text font-semibold shadow-sm" 
-    : "text-gray-600 hover:bg-brand-lavender hover:text-brand-text";
+    ? "text-brand-text font-semibold" 
+    : "text-gray-500 hover:text-brand-sage transition-colors";
 
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col font-sans text-brand-text">
       
-      {/* --- HEADER / NAVBAR --- */}
-      <header className="sticky top-0 z-50 w-full border-b border-brand-lavender bg-white/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          {/* Logo / Tên App */}
-          <div className="flex items-center gap-2">
-            <Link to="/" className="text-xl font-bold text-brand-text tracking-tight flex items-center gap-2">
-              <span className="text-2xl">🌿</span> Depression Helper
-            </Link>
-          </div>
+      {/* --- HEADER --- */}
+      <header className="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100/50">
+        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-brand-lavender/50 rounded-full flex items-center justify-center text-brand-sage group-hover:bg-brand-sage group-hover:text-white transition-all duration-300">
+              <Leaf className="w-5 h-5" />
+            </div>
+            <span className="text-xl font-medium tracking-tight text-gray-700 group-hover:text-brand-text transition-colors">
+              Depression Helper
+            </span>
+          </Link>
 
-          {/* Menu điều hướng (Desktop) */}
-          <nav className="hidden md:flex items-center gap-1">
-            {/* Link Trang chủ (Dashboard) */}
-            <Link to="/" className={`px-4 py-2 rounded-md transition-all ${isActive('/')}`}>
-              Trang chủ
-            </Link>
-
-            {/* Link Nhật ký */}
-            <Link to="/journal" className={`px-4 py-2 rounded-md transition-all ${isActive('/journal')}`}>
-              Nhật ký
-            </Link>
-
-            {/* Link Cảm xúc */}
-            <Link to="/mood" className={`px-4 py-2 rounded-md transition-all ${isActive('/mood')}`}>
-              Cảm xúc
-            </Link>
-
-            {/* Link Thư viện */}
-            <Link to="/library" className={`px-4 py-2 rounded-md transition-all ${isActive('/library')}`}>
-              Thư viện
-            </Link>
-            {/* Link Hồ sơ cá nhân */}
-            <Link to="/profile" className={`px-4 py-2 rounded-md transition-all ${isActive('/profile')}`}>
-              Hồ sơ
-            </Link>
-
-            {/* Link Admin - CHỈ HIỆN KHI LÀ ADMIN */}
-            {userInfo && userInfo.isAdmin && (
-              <Link to="/admin" className={`px-4 py-2 rounded-md transition-all ${isActive('/admin')} text-red-500 font-bold hover:bg-red-50`}>
-                Admin
-              </Link>
-            )}
+          <nav className="hidden md:flex items-center gap-10">
+            <Link to="/mood" className={`text-sm font-medium ${isActive('/mood')}`}>Mood Check</Link>
+            <Link to="/journal" className={`text-sm font-medium ${isActive('/journal')}`}>Journal</Link>
+            <Link to="/library" className={`text-sm font-medium ${isActive('/library')}`}>Prompts</Link>
+             <Link to="/profile" className={`text-sm font-medium ${isActive('/profile')}`}>Profile</Link>
           </nav>
 
-          {/* Nút Đăng xuất */}
-          <Button variant="ghost" onClick={handleLogout} className="hover:bg-red-50 hover:text-red-600 transition-colors">
-            Đăng xuất
-          </Button>
+          <div className="flex items-center gap-3">
+            {userInfo && userInfo.isAdmin && (
+              <Link to="/admin">
+                <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-600 hover:bg-red-50">
+                  <Shield className="w-4 h-4 mr-1" /> Admin
+                </Button>
+              </Link>
+            )}
+
+            <Link to="/journal">
+              <Button className="bg-brand-sage hover:bg-[#8BC4A0] text-white rounded-full px-6 py-2 font-medium shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                <Plus className="w-4 h-4 mr-2" /> New Entry
+              </Button>
+            </Link>
+
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={handleLogout}
+              className="text-gray-400 hover:text-red-500 hover:bg-transparent ml-2"
+              title="Đăng xuất"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
       </header>
 
-      {/* --- NỘI DUNG CHÍNH (Thay đổi theo trang) --- */}
-      <main className="flex-1 container mx-auto px-4 py-6 max-w-4xl animate-fade-in">
-        <Outlet /> {/* Đây là nơi các trang con (Home, Journal, Mood...) sẽ hiển thị */}
+      {/* --- NỘI DUNG CHÍNH (ĐÃ SỬA: Xóa container giới hạn) --- */}
+      <main className="flex-1 w-full animate-in fade-in duration-500">
+        <Outlet />
       </main>
 
-      {/* Footer nhỏ */}
-      <footer className="py-6 text-center text-sm text-gray-400 border-t border-brand-lavender/30 mt-auto">
-        <p>© 2025 Depression Helper. Một không gian chữa lành dành cho bạn.</p>
-      </footer>
-
+      <Footer />
+      <Toaster />
     </div>
   );
 };

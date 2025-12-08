@@ -1,6 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-import tailwindcssAnimate from "tailwindcss-animate"
-
 export default {
     darkMode: ["class"],
     content: [
@@ -17,13 +15,6 @@ export default {
       },
       extend: {
         colors: {
-          // --- MÀU CỦA CHÚNG TA ---
-          'brand-lavender': '#E6E6FA', 
-          'brand-sage': '#A0D6B4',      
-          'brand-text': '#3D405B',      
-          'brand-bg': '#FEFBF6',        
-
-          // --- MÀU SHADCN ---
           border: "hsl(var(--border))",
           input: "hsl(var(--input))",
           ring: "hsl(var(--ring))",
@@ -57,6 +48,16 @@ export default {
             DEFAULT: "hsl(var(--card))",
             foreground: "hsl(var(--card-foreground))",
           },
+          sidebar: {
+            DEFAULT: "hsl(var(--sidebar))",
+            foreground: "hsl(var(--sidebar-foreground))",
+            primary: "hsl(var(--sidebar-primary))",
+            "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+            accent: "hsl(var(--sidebar-accent))",
+            "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+            border: "hsl(var(--sidebar-border))",
+            ring: "hsl(var(--sidebar-ring))",
+          },
         },
         borderRadius: {
           lg: "var(--radius)",
@@ -79,5 +80,5 @@ export default {
         },
       },
     },
-    plugins: [tailwindcssAnimate],
+    plugins: [require("tailwindcss-animate")],
   }
