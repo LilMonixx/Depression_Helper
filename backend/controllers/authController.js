@@ -1,42 +1,35 @@
-const User = require('../models/userModel');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const User = require('../models/userModel');
 
-// @desc    Register a new user
+// @desc    Register new user
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = async (req, res) => {
     try {
-        //get data from request body
         const { displayName, email, password } = req.body;
 
-        // simple validation
         if (!displayName || !email || !password) {
-            return res.status(400).json({ message: 'Please enter all fields' });
+            return res.status(400).json({ message: 'Please add all fields' });
         }
 
-        // check for existing user
-        const userExists = await User.findOne({ email }); // Sửa tên biến 'userExits' thành 'userExists'
+        // Kiểm tra user tồn tại
+        const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // hash password
+        // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // create new user
-        const user = new User({
+        // Tạo user
+        const user = await User.create({
             displayName,
             email,
             password: hashedPassword,
         });
 
-        // --- DÒNG QUAN TRỌNG ĐƯỢC THÊM VÀO ---
-        await user.save(); // Lưu người dùng vào database
-
-        //if user created successfully, create token and send response
-        // (Kiểm tra 'user' là đủ, vì nếu save() lỗi, nó sẽ nhảy vào catch)
         if (user) {
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
                 expiresIn: '30d',
@@ -47,62 +40,53 @@ const registerUser = async (req, res) => {
                 displayName: user.displayName,
                 email: user.email,
                 isAdmin: user.isAdmin,
+                avatar: user.avatar,       // <-- Trả về avatar
+                coverImage: user.coverImage, // <-- Trả về cover
                 token: token,
             });
         } else {
             res.status(400).json({ message: 'Invalid user data' });
         }
     } catch (error) {
-        console.error(error); // Thêm console.error để xem lỗi trong terminal
-        res.status(500).json({ message: 'Server error' });
-    }
-};
-
-
-// @desc    Authenticate a user
-// @route   POST /api/auth/login
-// @access  Public
-const loginUser = async (req, res) => {
-    try {
-        // 1. Get user data from request body
-        const { email, password } = req.body;
-
-        // 2. Check if user exists
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        // 3. Check if password matches
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        // 4. If everything is ok, create a token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '30d',
-        });
-
-        // 5. Send back user info and token
-        res.status(200).json({
-            _id: user._id,
-            displayName: user.displayName,
-            email: user.email,
-            isAdmin: user.isAdmin,
-            token: token,
-        });
-
-    } catch (error) {
-        console.error(error); // Thêm console.error để xem lỗi
+        console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }
 };
 
+// @desc    Authenticate a user (Đăng nhập)
+// @route   POST /api/auth/login
+// @access  Public
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-// --- PHẦN SỬA LỖI CRASH ---
+        const user = await User.findOne({ email });
+
+        if (user && (await bcrypt.compare(password, user.password))) {
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+                expiresIn: '30d',
+            });
+
+            // Trả về đầy đủ thông tin
+            res.status(200).json({
+                _id: user._id,
+                displayName: user.displayName,
+                email: user.email,
+                isAdmin: user.isAdmin,
+                avatar: user.avatar,         // <-- Trả về avatar
+                coverImage: user.coverImage, // <-- Trả về cover
+                token: token,
+            });
+        } else {
+            res.status(400).json({ message: 'Invalid credentials' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
 module.exports = {
     registerUser,
-    loginUser, // Sửa 'LoginUser' thành 'loginUser'
+    loginUser,
 };

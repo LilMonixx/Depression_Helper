@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// This is the blueprint for a user
 const userSchema = new mongoose.Schema(
     {
         displayName: {
@@ -10,24 +9,34 @@ const userSchema = new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            unique: true, // Every email must be unique
+            unique: true,
         },
         password: {
             type: String,
-            required: true,
+            required: false, // <-- QUAN TRỌNG: User Google không có mật khẩu
         },
         isAdmin: {
             type: Boolean,
             required: true,
-            default: false,// Regular users are not admins by default
+            default: false,
+        },
+        avatar: {
+            type: String,
+            default: "",
+        },
+        coverImage: {
+            type: String,
+            default: "",
+        },
+        googleId: {
+            type: String, // <-- THÊM MỚI: ID từ Google
         },
     },
     {
-        timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
+        timestamps: true,
     }
 );
 
-// Create a model from the schema
 const User = mongoose.model('User', userSchema);
 
-module.exports = User; // Export the model so we can use it elsewhere
+module.exports = User;

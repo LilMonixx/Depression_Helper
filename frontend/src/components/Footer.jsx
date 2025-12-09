@@ -23,9 +23,9 @@ export default function Footer() {
       { name: "Hồ sơ", href: "/profile" },
     ],
     resources: [
-      { name: "Bài viết", href: "#" },
-      { name: "Podcast", href: "#" },
-      { name: "Video", href: "#" },
+      { name: "Bài viết", href: "/library" },
+      { name: "Podcast", href: "/library" },
+      { name: "Video", href: "/library" },
       { name: "Cộng đồng", href: "#" },
     ],
     company: [

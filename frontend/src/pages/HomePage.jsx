@@ -5,17 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BookOpen, ArrowRight, Sparkles } from 'lucide-react';
-import Moodchecker from '@/components/Moodchecker';
-
-// Import ảnh nền mới
+import Moodchecker from '@/components/Moodchecker'; 
+import FeaturesSection from '@/components/FeaturesSection';
 import heroBg from '@/assets/image/hero-bg.jpg'; 
 
 const HomePage = () => {
   const [journals, setJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
-  
-  // Lấy thông tin user
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
 
   useEffect(() => {
@@ -31,79 +28,65 @@ const HomePage = () => {
         setLoading(false);
       }
     };
-
     if (token) fetchJournals();
   }, [token]);
 
   return (
-    <div className="flex flex-col min-h-screen pb-10">
+    <div className="flex flex-col min-h-screen">
       
-      {/* --- 1. NEW HERO SECTION (GIỐNG ẢNH MẪU) --- */}
+      {/* --- HERO SECTION TRÀN VIỀN --- */}
       <section className="relative w-full h-[600px] flex items-center justify-center overflow-hidden mb-12">
-        {/* Ảnh nền */}
         <div className="absolute inset-0 z-0">
           <img 
             src={heroBg} 
             alt="Sanctuary Background" 
             className="w-full h-full object-cover"
           />
-          {/* Lớp phủ nhẹ để chữ dễ đọc hơn */}
           <div className="absolute inset-0 bg-white/40 mix-blend-overlay"></div>
+          {/* Gradient mờ dần xuống dưới để hòa vào nền trắng */}
+          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-brand-bg to-transparent"></div>
         </div>
 
-        {/* Nội dung chính */}
         <div className="relative z-10 text-center max-w-4xl px-6 mt-10">
-          {/* Badge nhỏ */}
           <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-md border border-white/50 px-4 py-1.5 rounded-full text-sm font-medium text-gray-700 mb-8 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
             <Sparkles className="w-4 h-4 text-brand-sage" />
-            <span>Your journey to inner peace starts here</span>
+            <span>Chào mừng, {userInfo.displayName || 'Bạn'}</span>
           </div>
 
-          {/* Tiêu đề lớn */}
           <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6 leading-tight tracking-tight animate-in fade-in slide-in-from-bottom-6 duration-1000">
             A Sanctuary for Your <br />
             <span className="text-[#437657]">Emotional Wellness</span>
           </h1>
 
-          {/* Mô tả */}
           <p className="text-xl text-gray-600 max-w-2xl mx-auto font-light leading-relaxed mb-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100">
-            Embrace your feelings, track your moods, and discover healing through guided journaling. Create a mindful space for self-reflection and growth.
+            Lắng nghe cảm xúc, ghi lại hành trình và tìm thấy sự bình an qua từng trang viết.
           </p>
 
-          {/* Nút bấm hành động */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-200">
              <Link to="/journal">
                 <Button className="bg-[#437657] hover:bg-[#356146] text-white rounded-md px-8 py-6 text-lg font-medium shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
-                  Begin Your Journey <ArrowRight className="ml-2 h-5 w-5" />
+                  Viết Nhật Ký Ngay <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
              </Link>
              <Link to="/library">
                 <Button variant="outline" className="bg-white/80 border-white text-gray-700 hover:bg-white rounded-md px-8 py-6 text-lg font-medium shadow-md hover:shadow-lg transition-all">
-                  Learn More
+                  Thư Viện
                 </Button>
              </Link>
           </div>
         </div>
-
-        {/* Icon chuột cuộn xuống (Trang trí) */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce opacity-50">
-            <div className="w-6 h-10 border-2 border-gray-500 rounded-full flex justify-center pt-2">
-                <div className="w-1 h-2 bg-gray-500 rounded-full"></div>
-            </div>
-        </div>
       </section>
 
-      {/* --- CÁC PHẦN CHỨC NĂNG CŨ (Giữ nguyên) --- */}
-      
-      <div className="container mx-auto px-4 space-y-16">
+      {/* --- CÁC PHẦN CÒN LẠI (Căn giữa bằng Container) --- */}
+      <div className="container mx-auto px-4 space-y-16 pb-20">
         
-        {/* --- 2. MOOD CHECK-IN --- */}
-        <div className="max-w-5xl mx-auto -mt24 relative z-20 shadow-xl rounded-3xl bg-white/80 backdrop-blur-md border border-white/50">
+        {/* MOOD TRACKER */}
+        <div className="max-w-5xl mx-auto -mt-24 relative z-20">
           <Moodchecker />
         </div>
 
-        {/* --- 3. RECENT JOURNALS --- */}
-        <section className="max-w-5xl mx-auto">
+        {/* NHẬT KÝ GẦN ĐÂY */}
+        <section className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8 px-2">
             <h2 className="text-3xl font-bold text-brand-text flex items-center gap-3">
               <div className="p-2 bg-brand-lavender/30 rounded-lg">
@@ -127,7 +110,7 @@ const HomePage = () => {
                ))
             ) : journals.length > 0 ? (
               journals.map((journal) => (
-                <Card key={journal._id} className="border-brand-lavender/30 shadow-sm hover:shadow-xl transition-all duration-300 bg-white group hover:-translate-y-1 cursor-pointer">
+                <Card key={journal._id} className="border-brand-lavender/30 shadow-sm hover:shadow-xl transition-all duration-300 bg-white group hover:-translate-y-1 cursor-pointer h-full flex flex-col">
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-start mb-2">
                       <div className="w-10 h-10 rounded-xl bg-brand-bg flex items-center justify-center text-xl border border-brand-sage/20">
@@ -141,21 +124,20 @@ const HomePage = () => {
                       {journal.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="flex-grow">
                     <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
                       {journal.content}
                     </p>
                   </CardContent>
-                  <CardFooter className="pt-0">
-                     <Link to="/journal" className="text-xs font-bold text-[#437657] flex items-center hover:underline mt-2">
-                        ĐỌC TIẾP <ArrowRight className="ml-1 h-3 w-3" />
+                  <CardFooter className="pt-4 border-t border-gray-50">
+                     <Link to="/journal" className="text-xs font-bold text-[#437657] flex items-center hover:underline w-full">
+                        ĐỌC TIẾP <ArrowRight className="ml-auto h-3 w-3" />
                      </Link>
                   </CardFooter>
                 </Card>
               ))
             ) : (
               <div className="col-span-3 text-center py-16 bg-brand-bg/50 rounded-3xl border-2 border-dashed border-brand-lavender">
-                <div className="text-5xl mb-4">🍃</div>
                 <p className="text-gray-500 mb-6 font-medium text-lg">Hành trình của bạn bắt đầu từ trang viết đầu tiên.</p>
                 <Link to="/journal">
                   <Button className="bg-[#437657] hover:bg-[#356146] text-white">
@@ -166,8 +148,11 @@ const HomePage = () => {
             )}
           </div>
         </section>
+
+        {/* FEATURES SECTION */}
+        <FeaturesSection />
+
       </div>
-      
     </div>
   );
 };

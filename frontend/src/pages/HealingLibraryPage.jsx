@@ -47,9 +47,9 @@ const HealingLibraryPage = () => {
 
   const filters = [
     { id: 'All', label: 'Tất cả' },
-    { id: 'Article', label: 'Bài đọc' },
-    { id: 'Podcast', label: 'Nghe' },
-    { id: 'Video', label: 'Xem' },
+    { id: 'Article', label: 'Bài Viết' },
+    { id: 'Podcast', label: 'Podcast' },
+    { id: 'Video', label: 'Video' },
   ];
 
   // --- Cấu hình Animation ---
