@@ -31,6 +31,9 @@ const userSchema = new mongoose.Schema(
         googleId: {
             type: String, // <-- THÊM MỚI: ID từ Google
         },
+        facebookId: {
+            type: String, // <-- THÊM MỚI: ID từ Facebook
+        },
     },
     {
         timestamps: true,
