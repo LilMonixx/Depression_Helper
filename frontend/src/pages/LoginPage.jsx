@@ -26,7 +26,7 @@ const LoginPage = () => {
       localStorage.setItem("token", token);
       
       // 2. Gọi API lấy thông tin user để lưu vào localStorage
-      axios.get('${API_URL}/api/users/profile', {
+      axios.get(`${API_URL}/api/users/profile`, {
          headers: { Authorization: `Bearer ${token}` }
       }).then(res => {
          localStorage.setItem("userInfo", JSON.stringify(res.data));
@@ -45,7 +45,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("${API_URL}/api/auth/login", {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password,
       });
@@ -158,7 +158,7 @@ const LoginPage = () => {
           <div className="grid gap-2">
             
             {/* Nút Google */}
-            <a href="${API_URL}/api/auth/google" className="w-full">
+            <a href={`${API_URL}/api/auth/google`} className="w-full">
               <Button variant="outline" type="button" className="w-full border-brand-lavender bg-white hover:bg-gray-50 text-gray-700 h-10 font-medium">
                 <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -171,7 +171,7 @@ const LoginPage = () => {
             </a>
 
             {/* Nút Facebook */}
-            <a href="${API_URL}/api/auth/facebook" className="w-full">
+            <a href={`${API_URL}/api/auth/facebook`} className="w-full">
               <Button variant="outline" type="button" className="w-full border-[#1877F2] bg-[#1877F2] hover:bg-[#166fe5] text-white h-10 font-medium">
                 <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036c-2.148 0-2.971.956-2.971 3.594v.416h3.918l-.577 3.629h-3.341v7.933h-4.845z"/>

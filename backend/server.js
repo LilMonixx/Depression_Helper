@@ -34,7 +34,8 @@ const app = express();
 
 app.use(cors(
     'http://localhost:5173',
-    'https://depression-helper-1.onrender.com'));
+    'https://depression-helper-1.onrender.com',
+    'https://depression-helper.vercel.app'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize()); // <-- Khởi chạy Passport middleware
