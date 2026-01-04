@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Sun, Heart, Moon, Zap, Cloud, CloudRain } from "lucide-react";
+import { Sparkles, Sun, Heart, Moon, Zap, Cloud, CloudRain, Smile, Star, Frown } from "lucide-react";
 import { toast } from "sonner";
 import axios from 'axios';
 
 // Định nghĩa danh sách cảm xúc giống thiết kế Serenity
 const moods = [
-  { id: "peaceful", icon: Sparkles, label: "Peaceful" },
-  { id: "happy", icon: Sun, label: "Happy" },
-  { id: "grateful", icon: Heart, label: "Grateful" },
-  { id: "reflective", icon: Moon, label: "Reflective" },
-  { id: "anxious", icon: Zap, label: "Anxious" },
-  { id: "cloudy", icon: Cloud, label: "Cloudy" },
-  { id: "sad", icon: CloudRain, label: "Sad" },
+  { id: "happy", icon: Smile, label: "Hạnh phúc" },
+  { id: "calm", icon: Sun, label: "Bình yên" },
+  { id: "grateful", icon: Star, label: "Biết ơn" },
+  { id: "loved", icon: Heart, label: "Được yêu" },
+  { id: "stressed", icon: Cloud, label: "Căng thẳng" },
+  { id: "sad", icon: Frown, label: "Buồn bã" },
+  
 ];
 
 export default function MoodTracker() {
@@ -28,10 +28,9 @@ export default function MoodTracker() {
         // Map moodId sang moodLevel (1-5) để khớp với Backend hiện tại
         // Tạm thời map đơn giản, bạn có thể sửa backend để lưu string nếu muốn
         let level = 3;
-        if (['peaceful', 'happy', 'grateful'].includes(moodId)) level = 5;
-        if (['reflective'].includes(moodId)) level = 4;
-        if (['cloudy'].includes(moodId)) level = 3;
-        if (['anxious'].includes(moodId)) level = 2;
+        if (['happy','loved'].includes(moodId)) level = 5;
+        if (['calm','grateful'].includes(moodId)) level = 4;
+        if (['stressed'].includes(moodId)) level = 2;
         if (['sad'].includes(moodId)) level = 1;
 
         await axios.post('http://localhost:5001/api/mood', 

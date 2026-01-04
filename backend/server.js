@@ -32,8 +32,11 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors(
+    'http://localhost:5173',
+    'https://depression-helper-1.onrender.com'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize()); // <-- Khởi chạy Passport middleware
 
 const PORT = process.env.PORT || 5000;

@@ -1,145 +1,92 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Leaf } from "lucide-react"; // Dùng icon Leaf cho hợp với logo 'Serenity'
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { Leaf, Facebook, Instagram, Twitter, Mail, MapPin, Phone } from 'lucide-react';
 
-export default function Footer() {
-  const [email, setEmail] = useState("");
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    // Xử lý logic đăng ký nhận tin (sau này)
-    console.log("Newsletter subscription:", email);
-    setEmail("");
-  };
-
-  // Danh sách các link (Bạn có thể sửa href thành link thật sau này)
-  const links = {
-    product: [
-      { name: "Nhật ký", href: "/journal" },
-      { name: "Cảm xúc", href: "/mood" },
-      { name: "Thư viện", href: "/library" },
-      { name: "Hồ sơ", href: "/profile" },
-    ],
-    resources: [
-      { name: "Bài viết", href: "/library" },
-      { name: "Podcast", href: "/library" },
-      { name: "Video", href: "/library" },
-      { name: "Cộng đồng", href: "#" },
-    ],
-    company: [
-      { name: "Về chúng tôi", href: "#" },
-      { name: "Liên hệ", href: "#" },
-      { name: "Tuyển dụng", href: "#" },
-      { name: "Đối tác", href: "#" },
-    ],
-    legal: [
-      { name: "Chính sách bảo mật", href: "#" },
-      { name: "Điều khoản sử dụng", href: "#" },
-      { name: "Cookie", href: "#" },
-    ],
-  };
-
+const Footer = () => {
   return (
-    <footer className="border-t border-brand-lavender/30 bg-white/50 backdrop-blur-sm mt-auto">
-      <div className="container mx-auto px-6 py-16 max-w-7xl">
-        
-        {/* Phần trên: Logo, Mô tả & Newsletter */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 mb-12">
+    <footer className="bg-brand-bg border-t border-brand-sage/20 pt-16 pb-8">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           
-          {/* Cột 1 (Lớn): Thông tin & Đăng ký */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-brand-lavender/50 flex items-center justify-center">
-                <Leaf className="w-5 h-5 text-brand-sage" />
+          {/* Cột 1: Logo & Giới thiệu */}
+          <div className="space-y-4">
+            <Link to="/" className="flex items-center gap-2 text-xl font-bold text-brand-text">
+              <div className="w-8 h-8 bg-brand-sage rounded-full flex items-center justify-center">
+                <Leaf className="w-4 h-4 text-white" />
               </div>
-              <span className="text-xl font-bold text-brand-text tracking-tight">Depression Helper</span>
-            </div>
-            <p className="text-gray-500 text-sm mb-6 max-w-xs leading-relaxed">
-              Nơi trú ẩn kỹ thuật số cho sức khỏe cảm xúc và sự phản chiếu nội tâm của bạn.
+              Depression Helper
+            </Link>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Người bạn đồng hành tin cậy trên hành trình tìm lại sự cân bằng và bình yên trong tâm hồn.
             </p>
-            
-            <form onSubmit={handleSubscribe} className="flex gap-2 flex-wrap">
-              <Input
-                type="email"
-                placeholder="Email của bạn"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 min-w-[200px] bg-white border-brand-lavender focus-visible:ring-brand-sage"
-              />
-              <Button type="submit" className="bg-brand-sage text-brand-text hover:bg-brand-sage/90">
-                Đăng ký
-              </Button>
-            </form>
           </div>
 
-          {/* Các cột Link */}
-          <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-4 gap-8">
-            {/* Cột Product */}
-            <div>
-              <h4 className="font-semibold mb-4 text-sm text-brand-text">Sản phẩm</h4>
-              <ul className="space-y-3">
-                {links.product.map((link) => (
-                  <li key={link.name}>
-                    <Link to={link.href} className="text-gray-500 text-sm hover:text-brand-sage transition-colors">
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* Cột 2: Điều hướng nhanh */}
+          <div className="flex flex-col gap-3">
+            <h3 className="font-bold text-brand-text text-lg mb-1">Menu</h3>
+            <Link to="/" className="text-gray-600 hover:text-brand-sage transition-colors">Trang chủ</Link>
+            <Link to="/journal" className="text-gray-600 hover:text-brand-sage transition-colors">Nhật ký</Link>
+            <Link to="/mood" className="text-gray-600 hover:text-brand-sage transition-colors">Cảm xúc</Link>
+            <Link to="/profile" className="text-gray-600 hover:text-brand-sage transition-colors">Hồ sơ</Link>
+          </div>
 
-            {/* Cột Resources */}
-            <div>
-              <h4 className="font-semibold mb-4 text-sm text-brand-text">Tài nguyên</h4>
-              <ul className="space-y-3">
-                {links.resources.map((link) => (
-                  <li key={link.name}>
-                    <a href={link.href} className="text-gray-500 text-sm hover:text-brand-sage transition-colors">
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* Cột 3: Khám phá (ĐÃ GẮN QUERY PARAM) */}
+          <div className="flex flex-col gap-3">
+            <h3 className="font-bold text-brand-text text-lg mb-1">Khám phá</h3>
+            
+            {/* LINK NÀY SẼ LỌC BÀI VIẾT */}
+            <Link to="/library?type=Article" className="text-gray-600 hover:text-brand-sage transition-colors">
+              Bài viết
+            </Link>
 
-            {/* Cột Company */}
-            <div>
-              <h4 className="font-semibold mb-4 text-sm text-brand-text">Công ty</h4>
-              <ul className="space-y-3">
-                {links.company.map((link) => (
-                  <li key={link.name}>
-                    <a href={link.href} className="text-gray-500 text-sm hover:text-brand-sage transition-colors">
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* LINK NÀY SẼ LỌC PODCAST */}
+            <Link to="/library?type=Podcast" className="text-gray-600 hover:text-brand-sage transition-colors">
+              Podcast
+            </Link>
 
-            {/* Cột Legal */}
-            <div>
-              <h4 className="font-semibold mb-4 text-sm text-brand-text">Pháp lý</h4>
-              <ul className="space-y-3">
-                {links.legal.map((link) => (
-                  <li key={link.name}>
-                    <a href={link.href} className="text-gray-500 text-sm hover:text-brand-sage transition-colors">
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            {/* LINK NÀY SẼ LỌC VIDEO */}
+            <Link to="/library?type=Video" className="text-gray-600 hover:text-brand-sage transition-colors">
+              Video
+            </Link>
+          </div>
+
+          {/* Cột 4: Liên hệ */}
+          <div className="flex flex-col gap-3">
+            <h3 className="font-bold text-brand-text text-lg mb-1">Liên hệ</h3>
+            <div className="flex items-center gap-2 text-gray-600">
+              <Mail className="w-4 h-4 text-brand-sage" />
+              <span className="text-sm">support@serenity.com</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <Phone className="w-4 h-4 text-brand-sage" />
+              <span className="text-sm">+84 123 456 789</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <MapPin className="w-4 h-4 text-brand-sage" />
+              <span className="text-sm">Đà Nẵng, Việt Nam</span>
             </div>
           </div>
         </div>
 
-        {/* Phần dưới: Copyright */}
-        <div className="pt-8 border-t border-brand-lavender/30 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Depression Helper. Bảo lưu mọi quyền.</p>
-          <p>Được làm với ❤️ cho hành trình chữa lành của bạn.</p>
+        {/* Dòng bản quyền */}
+        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-400 text-sm">
+            © 2025 Depression Helper. All rights reserved.
+          </p>
+          <div className="flex gap-4">
+            <a href="#" className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-brand-sage hover:border-brand-sage transition-all">
+              <Facebook className="w-4 h-4" />
+            </a>
+            <a href="#" className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-brand-sage hover:border-brand-sage transition-all">
+              <Instagram className="w-4 h-4" />
+            </a>
+            <a href="#" className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-brand-sage hover:border-brand-sage transition-all">
+              <Twitter className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;
