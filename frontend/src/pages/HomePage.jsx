@@ -8,6 +8,7 @@
   import Moodchecker from '@/components/Moodchecker'; 
   import FeaturesSection from '@/components/FeaturesSection';
   import heroBg from '@/assets/image/hero-bg.jpg'; 
+  import API_URL from '@/utils/apiConfig';
 
   const HomePage = () => {
     const [journals, setJournals] = useState([]);
@@ -18,7 +19,7 @@
     useEffect(() => {
       const fetchJournals = async () => {
         try {
-          const response = await axios.get('http://localhost:5001/api/journal', {
+          const response = await axios.get(`${API_URL}/api/journal`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setJournals(response.data.slice(0, 3)); 
