@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Sparkles, Sun, Heart, Moon, Zap, Cloud, CloudRain, Smile, Star, Frown } from "lucide-react";
 import { toast } from "sonner";
 import axios from 'axios';
+import API_URL from '@/utils/apiConfig';
 
 // Định nghĩa danh sách cảm xúc giống thiết kế Serenity
 const moods = [
@@ -29,11 +30,12 @@ export default function MoodTracker() {
         // Tạm thời map đơn giản, bạn có thể sửa backend để lưu string nếu muốn
         let level = 3;
         if (['happy','loved'].includes(moodId)) level = 5;
-        if (['calm','grateful'].includes(moodId)) level = 4;
+        if (['grateful'].includes(moodId)) level = 4;
+        if (['calm'].includes(moodId)) level = 3;
         if (['stressed'].includes(moodId)) level = 2;
         if (['sad'].includes(moodId)) level = 1;
 
-        await axios.post('http://localhost:5001/api/mood', 
+        await axios.post(`${API_URL}/api/mood`, 
           { moodLevel: level, note: mood.label }, 
           { headers: { Authorization: `Bearer ${token}` } }
         );
