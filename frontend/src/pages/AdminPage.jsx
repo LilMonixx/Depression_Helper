@@ -12,7 +12,7 @@ import {
   Video, Headphones, Link as LinkIcon, Search,
   Image as ImageIcon, Loader2, Edit // <-- Thêm icon Edit
 } from 'lucide-react';
-import
+import API_URL from '@/utils/apiConfig';
 
 const AdminPage = () => {
   const [contents, setContents] = useState([]);
