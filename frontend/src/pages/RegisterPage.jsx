@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { ArrowLeft, Leaf, Loader2 } from "lucide-react";
 import heroBg from '@/assets/image/hero-bg.jpg';
+import API_URL from '@/utils/apiConfig';
 
 const RegisterPage = () => {
   const [displayName, setDisplayName] = useState("");
@@ -21,7 +22,7 @@ const RegisterPage = () => {
     
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5001/api/auth/register", {
+      const response = await axios.post(`${API_URL}/api/auth/register`, {
         displayName,
         email,
         password,
