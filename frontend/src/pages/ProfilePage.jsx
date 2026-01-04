@@ -13,6 +13,7 @@ import {
   ArrowRight, Sparkles, Camera, Edit
 } from 'lucide-react';
 import defaultHeroBg from '@/assets/image/hero-bg.jpg'; 
+import API_URL from '@/utils/apiConfig';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
@@ -35,7 +36,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get('http://localhost:5001/api/users/profile', {
+        const res = await axios.get(`${API_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfile(res.data);
@@ -69,12 +70,11 @@ const ProfilePage = () => {
       };
 
       // Gửi file lên API upload
-      const { data } = await axios.post('http://localhost:5001/api/upload', formData, config);
+      const { data } = await axios.post(`${API_URL}/api/upload`, formData, config);
 
       // Backend trả về đường dẫn (ví dụ: /uploads/image-123.jpg)
       // Chúng ta cần thêm domain backend vào trước
-      const fullPath = `http://localhost:5001${data}`;
-
+      const fullPath = `${API_URL}${data}`;
       if (type === 'avatar') {
         setEditAvatar(fullPath);
         toast.success('Đã tải ảnh đại diện lên!');
@@ -93,7 +93,7 @@ const ProfilePage = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      const res = await axios.put('http://localhost:5001/api/users/profile', 
+      const res = await axios.put(`${API_URL}/api/users/profile`, 
         { 
           displayName: editName,
           avatar: editAvatar,

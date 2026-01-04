@@ -10,6 +10,7 @@ import {
   BookOpen, Headphones, Video, Link as LinkIcon, 
   Sparkles, Loader2, Search, ImageOff 
 } from 'lucide-react';
+import API_URL from '@/utils/apiConfig';
 
 const HealingLibraryPage = () => {
   const [contentList, setContentList] = useState([]);
@@ -34,7 +35,7 @@ const HealingLibraryPage = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/content');
+        const response = await axios.get(`${API_URL}/api/content`);
         setContentList(response.data);
       } catch (err) {
         console.error("Lỗi tải nội dung:", err);

@@ -12,6 +12,7 @@ import {
   Video, Headphones, Link as LinkIcon, Search,
   Image as ImageIcon, Loader2, Edit // <-- Thêm icon Edit
 } from 'lucide-react';
+import
 
 const AdminPage = () => {
   const [contents, setContents] = useState([]);
@@ -31,7 +32,7 @@ const AdminPage = () => {
   // 1. LẤY DỮ LIỆU
   const fetchContents = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/api/content');
+      const res = await axios.get(`${API_URL}/api/content`);
       setContents(res.data);
     } catch (err) {
       console.error(err);
@@ -52,8 +53,8 @@ const AdminPage = () => {
 
     try {
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-      const { data } = await axios.post('http://localhost:5001/api/upload', formDataUpload, config);
-      const fullPath = `http://localhost:5001${data}`;
+      const { data } = await axios.post(`${API_URL}/api/upload`, formDataUpload, config);
+      const fullPath = `${API_URL}${data}`;
       setFormData(prev => ({ ...prev, thumbnailUrl: fullPath }));
       toast.success('Tải ảnh thành công!');
     } catch (error) {
@@ -92,11 +93,11 @@ const AdminPage = () => {
 
       if (currentId) {
         // --- LOGIC SỬA (PUT) ---
-        await axios.put(`http://localhost:5001/api/content/${currentId}`, formData, config);
+        await axios.put(`${API_URL}/api/content/${currentId}`, formData, config);
         toast.success('Đã cập nhật nội dung');
       } else {
         // --- LOGIC THÊM (POST) ---
-        await axios.post('http://localhost:5001/api/content', formData, config);
+        await axios.post(`${API_URL}/api/content`, formData, config);
         toast.success('Đã thêm nội dung mới');
       }
 
@@ -111,7 +112,7 @@ const AdminPage = () => {
   const handleDelete = async (id) => {
     if(!window.confirm('Bạn chắc chắn muốn xóa?')) return;
     try {
-      await axios.delete(`http://localhost:5001/api/content/${id}`, {
+      await axios.delete(`${API_URL}/api/content/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Đã xóa');

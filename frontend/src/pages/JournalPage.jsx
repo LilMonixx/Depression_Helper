@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from "sonner";
 import { Plus, Save, Trash2, Edit2, Book, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import API_URL from '@/utils/apiConfig';
 
 const JournalPage = () => {
   const [journals, setJournals] = useState([]);
@@ -24,7 +25,7 @@ const JournalPage = () => {
 
   const fetchJournals = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/api/journal', {
+      const res = await axios.get(`${API_URL}/api/journal`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJournals(res.data);
@@ -42,7 +43,7 @@ const JournalPage = () => {
     e.preventDefault();
     if (!title || !content) return toast.error('Vui lòng nhập đủ thông tin');
     try {
-      await axios.post('http://localhost:5001/api/journal', { title, content }, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.post(`${API_URL}/api/journal`, { title, content }, { headers: { Authorization: `Bearer ${token}` } });
       toast.success('Đã lưu nhật ký'); 
       setTitle(''); 
       setContent(''); 
@@ -53,7 +54,7 @@ const JournalPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Xóa bài viết này?')) return;
     try {
-      await axios.delete(`http://localhost:5001/api/journal/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`${API_URL}/api/journal/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       toast.success('Đã xóa'); 
       // Cập nhật state trực tiếp để thấy hiệu ứng xóa ngay lập tức
       setJournals(journals.filter(j => j._id !== id));
@@ -66,7 +67,7 @@ const JournalPage = () => {
   
   const handleUpdate = async () => {
      try {
-      await axios.put(`http://localhost:5001/api/journal/${currentJournal._id}`, 
+      await axios.put(`${API_URL}/api/journal/${currentJournal._id}`, 
         { title: editTitle, content: editContent }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );

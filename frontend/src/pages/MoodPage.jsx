@@ -16,6 +16,7 @@ import {
   isAfter, startOfDay 
 } from 'date-fns';
 import { vi } from 'date-fns/locale';
+import API_URL from '@/utils/apiConfig';
 
 // --- CẤU HÌNH MOOD ---
 const MOODS_CONFIG = [
@@ -77,7 +78,7 @@ export default function MoodPage() {
   const fetchMoods = async () => {
     if (!token) return;
     try {
-      const res = await axios.get('http://localhost:5001/api/mood', {
+      const res = await axios.get(`${API_URL}/api/mood`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMoodsData(res.data);
@@ -108,7 +109,7 @@ export default function MoodPage() {
 
     setSubmitting(true);
     try {
-      await axios.post('http://localhost:5001/api/mood', 
+      await axios.post(`${API_URL}/api/mood`, 
         { 
           moodLevel: selectedMood.level, 
           note: note,
