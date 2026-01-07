@@ -28,7 +28,7 @@ router.get(
     // Đăng nhập thành công -> Tạo token
     const token = generateToken(req.user._id);
     // Chuyển hướng về Frontend kèm token
-    res.redirect(`http://localhost:5173/login?token=${token}`);
+    res.redirect(process.env.CLIENT_URL);
   }
 );
 
@@ -47,7 +47,7 @@ router.get(
     // Đăng nhập thành công -> Tạo token
     const token = generateToken(req.user._id);
     // Chuyển hướng về Frontend kèm token
-    res.redirect(`http://localhost:5173/login?token=${token}`);
+    res.redirect(process.env.CLIENT_URL);
   }
 );
 
