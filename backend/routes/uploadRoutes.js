@@ -1,49 +1,36 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const router = express.Router();
 
-// 1. Cấu hình nơi lưu và tên file
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/'); // Lưu vào thư mục 'uploads' ở root backend
-  },
-  filename(req, file, cb) {
-    // Đặt tên file: tên-gốc + ngày-tháng + đuôi-file (để tránh trùng)
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    );
+// 1. Cấu hình Cloudinary (Lấy từ biến môi trường)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// 2. Cấu hình nơi lưu là Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'depression-helper', // Tên thư mục trên cloud, đặt gì cũng đc
+    allowed_formats: ['jpg', 'png', 'jpeg'], // Chỉ cho phép định dạng ảnh
   },
 });
 
-// 2. Kiểm tra định dạng file (chỉ cho phép ảnh)
-function checkFileType(file, cb) {
-  const filetypes = /jpg|jpeg|png/;
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = filetypes.test(file.mimetype);
+const upload = multer({ storage });
 
-  if (extname && mimetype) {
-    return cb(null, true);
-  } else {
-    cb('Images only!');
-  }
-}
-
-// 3. Khởi tạo middleware upload
-const upload = multer({
-  storage,
-  fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
-  },
-});
-
-// 4. Tạo Route Upload
-// Khi gọi POST /api/upload, nó sẽ xử lý 1 file có key là 'image'
+// 3. Route Upload
 router.post('/', upload.single('image'), (req, res) => {
-  // Trả về đường dẫn file đã lưu để Frontend dùng
-  res.send(`/${req.file.path.replace(/\\/g, "/")}`); 
+  // Cloudinary sẽ tự upload và trả về đường dẫn full (có https://...) trong req.file.path
+  if (!req.file) {
+    return res.status(400).send('No file uploaded');
+  }
+  
+  // Trả về link ảnh trực tiếp từ Cloudinary
+  res.send(req.file.path); 
 });
 
 module.exports = router;
