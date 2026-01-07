@@ -8,10 +8,13 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/api/auth/google/callback',
+        // SỬA Ở ĐÂY: Dùng biến môi trường thay vì chuỗi cứng
+        callbackURL: process.env.GOOGLE_CALLBACK_URL, 
+        // Nếu muốn chắc ăn hơn khi chạy sau proxy của Render:
+        proxy: true, 
       },
       async (accessToken, refreshToken, profile, done) => {
-        // Thông tin Google trả về
+        // ... (Giữ nguyên logic cũ của bạn) ...
         const newUser = {
           googleId: profile.id,
           displayName: profile.displayName,
@@ -20,24 +23,17 @@ module.exports = function (passport) {
         };
 
         try {
-          // 1. Kiểm tra xem user có googleId này chưa
           let user = await User.findOne({ googleId: profile.id });
-
           if (user) {
             return done(null, user);
           } else {
-            // 2. Nếu chưa, kiểm tra xem email này đã đăng ký chưa
             user = await User.findOne({ email: profile.emails[0].value });
-
             if (user) {
-              // Nếu email đã có, cập nhật thêm googleId vào tài khoản đó
               user.googleId = profile.id;
-              // Cập nhật avatar nếu chưa có
               if (!user.avatar) user.avatar = profile.photos[0].value;
               await user.save();
               return done(null, user);
             } else {
-              // 3. Nếu chưa có gì hết, tạo user mới
               user = await User.create(newUser);
               return done(null, user);
             }
@@ -49,32 +45,33 @@ module.exports = function (passport) {
       }
     )
   );
+
   passport.use(
     new FacebookStrategy(
       {
         clientID: process.env.FACEBOOK_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL: '/api/auth/facebook/callback',
-        profileFields: ['id', 'displayName', 'photos', 'email'], // Yêu cầu các trường này
+        // SỬA Ở ĐÂY:
+        callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+        profileFields: ['id', 'displayName', 'photos', 'email'],
+        // Thêm dòng này cho Facebook luôn:
+        proxy: true,
       },
       async (accessToken, refreshToken, profile, done) => {
-        const newUser = {
+         // ... (Giữ nguyên logic cũ của bạn) ...
+         const newUser = {
           facebookId: profile.id,
           displayName: profile.displayName,
-          // Facebook đôi khi không trả về email nếu user đăng ký bằng sđt
-          // Nên ta cần kiểm tra kỹ
           email: profile.emails ? profile.emails[0].value : `${profile.id}@facebook.com`, 
           avatar: profile.photos ? profile.photos[0].value : "",
         };
 
         try {
           let user = await User.findOne({ facebookId: profile.id });
-
           if (user) {
             return done(null, user);
           } else {
             user = await User.findOne({ email: newUser.email });
-
             if (user) {
               user.facebookId = profile.id;
               if (!user.avatar) user.avatar = newUser.avatar;
@@ -91,5 +88,5 @@ module.exports = function (passport) {
         }
       }
     )
-    );    
+  );    
 };

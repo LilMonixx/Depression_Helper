@@ -70,7 +70,7 @@
                   </Button>
               </Link>
               <Link to="/library">
-                  <Button variant="outline" className="bg-white/80 border-white text-gray-700 hover:bg-white rounded-md px-8 py-6 text-lg font-medium shadow-md hover:shadow-lg transition-all">
+                  <Button variant="outline" className=" bg-white/80 border-white text-gray-700 hover:bg-white rounded-md px-8 py-6 text-lg font-medium shadow-md hover:shadow-lg transition-all">
                     Thư Viện
                   </Button>
               </Link>

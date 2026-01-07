@@ -21,7 +21,7 @@ import API_URL from '@/utils/apiConfig';
 // --- CẤU HÌNH MOOD ---
 const MOODS_CONFIG = [
   { id: "happy", level: 5, icon: Smile, label: "Hạnh phúc", color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-200", gradient: "from-emerald-400 to-emerald-600" },
-  { id: "calm", level: 4, icon: Sun, label: "Bình yên", color: "text-sky-600", bg: "bg-sky-50", border: "border-sky-200", gradient: "from-sky-400 to-sky-600" },
+  { id: "calm", level: 3, icon: Sun, label: "Bình yên", color: "text-sky-600", bg: "bg-sky-50", border: "border-sky-200", gradient: "from-sky-400 to-sky-600" },
   { id: "grateful", level: 4, icon: Star, label: "Biết ơn", color: "text-purple-600", bg: "bg-purple-50", border: "border-purple-200", gradient: "from-purple-400 to-purple-600" },
   { id: "loved", level: 5, icon: Heart, label: "Được yêu", color: "text-rose-600", bg: "bg-rose-50", border: "border-rose-200", gradient: "from-rose-400 to-rose-600" },
   { id: "stressed", level: 2, icon: Cloud, label: "Căng thẳng", color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200", gradient: "from-amber-400 to-amber-600" },
